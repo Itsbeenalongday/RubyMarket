@@ -1,0 +1,49 @@
+<div class="container my-5">
+  <div class="row">
+    <div class="col-md-6 mr-5">
+      <%=image_tag(@item.image.url, class: "rounded-3", style: "width:500px; height:700px") if @item.image.present? %>
+    </div>
+    <div class="card p-0 col-md-4 border-danger">
+      <div class="card-header text-danger text-center"><h3>상품 소개</h3></div>
+      <div class="card-body text-danger">
+        <h5 class="card-title text-center"><%= @item.title %></h5>
+        <p class="card-text"><%= @item.description %></p>
+      </div>
+      <div class="card-footer">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <button class="btn btn-outline-secondary" type="button" id="down">-</button>
+          </div>
+          <input type="text" class="form-control text-center" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2" id="quan", value="0">
+          <div class="input-group-append mr-4">
+            <button class="btn btn-outline-secondary" type="button" id="up">+</button>
+          </div>
+            <button class="btn btn-outline-danger btn-sm float-right" type="button" id="add_cart">장바구니에 담기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var amount;
+  $('#down').click(function(){
+    amount = +$('#quan').val();
+    amount*1-1 <= 0 ? alert('더이상 줄일 수 없습니다.') : amount = +$('#quan').val(amount*1-1);
+  });
+  $('#up').click(function(){
+    amount = +$('#quan').val();
+    amount = +$('#quan').val(amount*1+1);
+  });
+  $('#add_cart').on('click',function(){
+      amount = +$('#quan').val();
+      $.ajax({
+      url: "/items/add?quantity="+ amount +"&id="+<%= @item.id %>,
+      type: "GET",
+      datatype: "json",
+      success:function(){
+        alert('장바구니에 '+ amount +'개 집어 넣었습니다.')
+      }
+    });
+  });
+</script>

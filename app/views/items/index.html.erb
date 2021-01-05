@@ -1,0 +1,30 @@
+<div class="container my-5">
+  <% if params[:type] == "categories" %>
+    <h2 class="text-center"><%= Item.ransack(params[:q]).result.first.category.title %></h2>
+  <% elsif params[:type] == "owns" %>
+    <h2 class="text-center">내 상품</h2>
+  <% else %>
+    <h2 class="text-center">판매중인 상품들</h2>
+  <% end %>
+  <hr/>
+  <div class="row">
+    <% @items.each do |item| %>
+      <div class="col-md-3 mb-4">
+        <div class="card h-100">
+          <img src="<%= item.image.url(:thumb) if item.image? %>" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title"><%= item.title %></h5>
+            <p class="card-text"><%= item.description %></p>
+          </div>
+          <div class="card-footer">
+            <%= link_to "상세보기", item_path(item.id), class: "btn btn-outline-danger btn-sm" %>
+            <% if item.user == current_user %>
+              <%= link_to "삭제", item_path(item), method: :delete, data: {confirm: "정말로 삭제하시겠습니까?" },class: "btn btn-outline-danger btn-sm" %>
+              <%= link_to "수정", edit_item_path(item), class: "btn btn-outline-danger btn-sm" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

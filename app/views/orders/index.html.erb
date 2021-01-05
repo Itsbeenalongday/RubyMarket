@@ -1,0 +1,6 @@
+결제완료된 주문들을 보여주는 내 주문목록 페이지
+<% @orders.each do |order| %>
+  <%= order.paid_at %>
+  <%= order.total %>
+   <br/>
+<% end %>
