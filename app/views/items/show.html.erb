@@ -25,7 +25,7 @@
   </div>
   <%= link_to toggle_like_item_path(@item), remote: true do %>
     <div class="row mt-5 mb-3 ml-1" id="item-like">
-      <%= render 'shared/likable', like: @like ? false : true %>
+      <%= render 'items/likable', like: @like ? false : true %>
     </div>
   <% end %>
 </div>

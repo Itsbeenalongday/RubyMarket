@@ -1,0 +1,2 @@
+var html = "<%= j(render(partial: 'comments/likable', locals: { like: @comment_like.destroyed? ? true : false })) %>"
+$('#comment-like').html(html)

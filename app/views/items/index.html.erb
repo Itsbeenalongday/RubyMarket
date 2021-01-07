@@ -5,8 +5,10 @@
     <h2 class="text-center text-danger">내 상품</h2>
   <% elsif params[:type] == "search" %>
     <h2 class="text-center text-danger">검색 결과</h2>
+  <% elsif params[:type] == "my" %>
+    <h2 class="text-center text-danger">내가 찜한 상품들</h2>
   <% else %>
-    <h2 class="text-center text-danger">판매중인 상품들</h2>
+    <h2 class="text-center text-danger">상품 전체</h2>
   <% end %>
   <hr/>
   <div class="row mb-4">

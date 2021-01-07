@@ -8,8 +8,9 @@ class CommentsController < ApplicationController
   end
 
   def show
-    @like = current_user.likes.find_or_initialize_by(likable_id: @comment)
-	  @like.destroy unless @like.new_record?
+    @comment_like = current_user.likes.find_or_initialize_by(likable_id: @comment.id, likable_type: "Comment")
+    @comment_like.new_record? ? @comment_like.save : @comment_like.destroy
+    render 'comments/likable.js', locals: { like: @comment_like.destroyed? ? true : false }
   end
 
   def edit

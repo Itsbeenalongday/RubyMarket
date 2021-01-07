@@ -7,8 +7,9 @@ class ItemsController < ApplicationController
   def index
     order = { '등록 순' => :created_at, '가격 순' => :price, '이름 순' => :title }
     q = params[:query] if params[:query]
-    q = eval(params[:query]) if q.instance_of?(String) # eval은 문자열을 hash로 바꾸는 함수
+    q = eval(params[:query]) if q.instance_of?(String) # eval은 문자열을 hash로 바꾸는 함수, hidden field에서 string을 넘어오기 때문에 캐스팅 필요
     q ? @items = Item.ransack(title_or_description_cont: q[:title_or_description], category_id_eq: q[:category_id], user_id_eq: q[:user_id]).result : @items = Item.all
+    @items = @items.where(id: current_user.likes.where(likable_id: @items, likable_type: "Item").map(&:likable_id)) if params[:type] == "my" && current_user
     params[:order] ? @items = @items.order(order[params[:order]]).page(params[:page]) : @items = @items.page(params[:page])
   end
   
@@ -31,8 +32,7 @@ class ItemsController < ApplicationController
   def toggle_like
     @like = current_user.likes.find_or_initialize_by(likable_id: @item.id, likable_type: "Item")
     @like.new_record? ? @like.save : @like.destroy
-    puts @like.destroyed? ? true : false
-    render 'shared/likable.js', locals: { like: @like.destroyed? ? true : false }
+    render 'items/likable.js', locals: { like: @like.destroyed? ? true : false }
   end
   
   def show
