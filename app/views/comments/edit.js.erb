@@ -1,0 +1,4 @@
+var html = "<%= j(render(partial: 'comments/edit', locals: {comment: @comment, item: @comment.item})) %>"
+$('#comment-<%=comment.id%>-body').html(html)
+$('hr').addClass('mt-5')
+$('#button-group-<%= comment.id %>').hide()

@@ -8,7 +8,7 @@
     <ul class="navbar-nav">
       <% Category.order(:position).each do |category| %>
         <li class="nav-item active">
-         <a class="nav-link <%= params[:category_id].to_i == category.id ? "active" : "" %>" href="<%= items_path(q: {"category_id_eq":"#{category.id}"}, type: "categories") %>"><%= category.title %></a>
+         <a class="nav-link <%= params[:q].to_i == category.id ? "active" : "" %>" href="<%= items_path(q: category.id, type: "category_id_eq", query: query_string(search: nil, category: category.id, user: nil)) %>"><%= category.title %></a>
         </li>
       <% end %>
     </ul>
@@ -21,7 +21,7 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item" href="<%= new_order_path %>">장바구니</a>
             <a class="dropdown-item" href="#">찜한 상품</a>
-            <a class="dropdown-item" href="<%= items_path(q: {"user_id_eq":"#{current_user.id}"}, type: "owns") %>">내 상품</a>
+            <a class="dropdown-item" href="<%= items_path(q: current_user.id, type: "user_id_eq", query: query_string(search: nil, category: nil, user: current_user.id)) %>">내 상품</a>
             <a class="dropdown-item" href="<%= orders_path %>">내 주문</a>
              <a class="dropdown-item" href="<%= new_item_path %>">상품 등록</a>
             <a class="dropdown-item" href="<%= edit_user_registration_path %>">회원정보수정</a>

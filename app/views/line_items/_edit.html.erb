@@ -1,0 +1,18 @@
+<td id="editable-<%= @line_item.id %>-quantity">
+  <%= form_for(@line_item, url: order_line_item_path, method: :put, remote: true) do |f| %>
+    <%= f.text_field :quantity, class: "form-control", value: "#{@line_item.quantity}", size: 1, id: "editable-quantity" %>
+    <div class="mt-2 text-right">
+      <%= f.submit '개수 수정', class: 'btn btn-primary btn-sm' %>
+    </div>
+  <% end %>
+</td>
+
+<script>
+  $('#editable-quantity').change(function(){
+    var quan = +$('#editable-quantity').val();
+    if(quan <=0){
+      alert('유효하지않은 수량입니다.');
+      $('#editable-quantity').val(<%= @line_item.quantity %>);
+    }
+  });
+</script>

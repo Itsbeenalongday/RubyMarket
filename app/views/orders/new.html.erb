@@ -7,14 +7,19 @@
         <th>상품 가격</th>
         <th>주문 수량</th>
         <th>주문 가격</th>
+        <th>취소 및 삭제</th>
       </thead>
       <tbody>
         <% @order.line_items.each do | line_item | %>
-        <tr>
+        <tr id="editable-<%= line_item.id %>-parent">
           <td><%= Item.find_by(id: line_item.item_id).title %></td>
-          <td><%= line_item.price %>원</td>
-          <td><%= line_item.quantity %>개</td>
-          <td><%= line_item.price * line_item. quantity%>원</td>
+          <td><%= line_item.item.price %>원</td>
+          <td id="editable-<%= line_item.id %>-quantity"><%= line_item.quantity %>개</td>
+          <td id="editable-<%= line_item.id %>-price"><%= Item.find_by(id: line_item.item).price* line_item.quantity%>원</td>
+          <td>
+            <%= link_to "수정",  edit_order_line_item_path(order_id: @order, id: line_item), remote: true, class: "btn btn-outline-danger" %>
+            <%= link_to "삭제",  order_line_item_path(order_id: @order, id: line_item), remote: true, method: :delete, class: "btn btn-outline-danger" %>
+          </td>
         </tr>
         <% end %>
       </tbody>

@@ -1,6 +1,8 @@
 class Item < ApplicationRecord
   mount_uploader :image, ImageUploader # 이미지 첨부를 위해 이 부분 추가
 
+  paginates_per 8 # pagenation
+
   belongs_to :user, optional: true # 회원 탈퇴해도 상품 남기기
   belongs_to :category, optional: true # 카테고리 없어져도 상품은 남기기
 

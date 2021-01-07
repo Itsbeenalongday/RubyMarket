@@ -1,18 +1,14 @@
 class ItemsController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :show]
+  before_action :authenticate_user!, except: [:index]
   before_action :load_item, only: [:show, :add]
   before_action :safe_load_item, only: [:edit, :update, :destroy]
   
   def index
-    # hash형태로 params에서 넘겨주면 바로 받아오면 된다.
-    # 예시
-    
-    # 카테고리 별
-    # params[:q] == {"category_id_eq":"#{category.id}"}
-
-    # 내가 판매 중인 상품
-    # params[:q] == {"user_id_eq":"#{current_user.id}"}
-    @items = Item.ransack(params[:q]).result
+    order = { '등록 순' => :created_at, '가격 순' => :price, '이름 순' => :title }
+    q = params[:query] if params[:query]
+    q = eval(params[:query]) if q.instance_of?(String) # eval은 문자열을 hash로 바꾸는 함수
+    q ? @items = Item.ransack(title_or_description_cont: q[:title_or_description], category_id_eq: q[:category_id], user_id_eq: q[:user_id]).result : @items = Item.all
+    params[:order] ? @items = @items.order(order[params[:order]]).page(params[:page]) : @items = @items.page(params[:page])
   end
   
   def new
@@ -31,7 +27,10 @@ class ItemsController < ApplicationController
     redirect_to root_path, notice: "상품을 성공적으로 수정하였습니다."
   end
   
-  def show;end
+  def show
+    @comments = @item.comments.page(params[:page])
+  end
+
 
   def add 
     @order = get_cart
@@ -53,7 +52,7 @@ class ItemsController < ApplicationController
   end
 
   def safe_load_item
-    @item = Item.ransack(user_id_eq: current_user.id).result.ransack(id_eq: params[:id]).result(distinct: true).uniq
+    @item = current_user.items.find_by(id:params[:id])
   end
   
   def item_params

@@ -8,8 +8,12 @@ Rails.application.routes.draw do
     collection do
       get :add
     end
-	end
-	resources :orders
-  resources :comments
 
+    resources :comments
+  
+	end
+  resources :orders do
+    resources :line_items
+	end
+  
 end

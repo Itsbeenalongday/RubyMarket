@@ -1,0 +1,2 @@
+var html = "<%= j(render(partial: 'line_items/update')) %>"
+$("#editable-<%= @line_item.id %>-parent").replaceWith(html)

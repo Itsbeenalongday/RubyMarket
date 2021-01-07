@@ -1,13 +1,35 @@
 <div class="container my-5">
-  <% if params[:type] == "categories" %>
-    <h2 class="text-center"><%= Item.ransack(params[:q]).result.first.category.title %></h2>
-  <% elsif params[:type] == "owns" %>
+  <% if params[:type] == "category_id_eq" %>
+    <h2 class="text-center"><%= Category.find_by(id: params[:q]).title %></h2>
+  <% elsif params[:type] == "user_id_eq" %>
     <h2 class="text-center">내 상품</h2>
+  <% elsif params[:type] == "search" %>
+    <h2 class="text-center">검색 결과</h2>
   <% else %>
     <h2 class="text-center">판매중인 상품들</h2>
   <% end %>
   <hr/>
-  <div class="row">
+  <div class="row mb-4">
+    <div class="dropdown mr-1 col align-self-start">
+      <button type="button" class="btn btn-outline-danger dropdown-toggle" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
+        정렬 기준
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
+        <%= link_to "가격 순", request.parameters.merge(order: "가격 순"), class: "dropdown-item text-danger" %>
+        <%= link_to "등록 순", request.parameters.merge(order: "등록 순"), class: "dropdown-item text-danger" %>
+        <%= link_to "이름 순", request.parameters.merge(order: "이름 순"), class: "dropdown-item text-danger" %>
+      </div>
+    </div>
+    <%= form_tag request.parameters, method: :get do %>
+      <div class="form-inline col align-self-end">   
+        <%= text_field_tag :search, params[:search], class: "form-control mr-1", placeholder: "상품 명 및 설명 검색" %>
+        <%= hidden_field_tag :type, "search" %>
+        <%= hidden_field_tag :query, "", {id: "search-query"} %>
+        <%= submit_tag "검색", class: "btn btn-outline-danger mr-1", id: "search-button" %>
+      </div>
+    <% end %>
+  </div>
+  <div class="row" id="items-box">
     <% @items.each do |item| %>
       <div class="col-md-3 mb-4">
         <div class="card h-100">
@@ -27,4 +49,13 @@
       </div>
     <% end %>
   </div>
+  <div class="row justify-content-center">
+    <%= paginate @items %>
+  </div>
 </div>
+
+<script>
+  $('#search-button').click(function(){
+    $('#search-query').val("{title_or_description: " + $("#search").val() + ", category_id: \"\", user_id: \"\"}");
+  })
+</script>
