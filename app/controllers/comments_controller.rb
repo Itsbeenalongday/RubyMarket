@@ -7,6 +7,11 @@ class CommentsController < ApplicationController
     render 'create.js', locals: {comment: @comment, item: @comment.item}
   end
 
+  def show
+    @like = current_user.likes.find_or_initialize_by(likable_id: @comment)
+	  @like.destroy unless @like.new_record?
+  end
+
   def edit
     render 'edit.js', locals: {comment: @comment, item: @comment.item}
   end

@@ -15,3 +15,11 @@
 //= require jquery
 //= require popper
 //= require bootstrap
+
+$(function () {
+  $(".alert")
+    .fadeTo(2000, 0.5)
+    .slideUp(500, function () {
+      $(".alert").alert("close");
+    });
+});

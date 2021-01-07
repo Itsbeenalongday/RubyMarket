@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <%= image_tag("/image/ruby.png", size:"20x20") %>
-  <a class="navbar-brand p-2" href="/">Ruby Market</a>
+  <i class="fas fa-gem text-danger mt-2" style="font-size: 25px"></i>
+  <a class="navbar-brand p-2 text-danger" href="/">Ruby Market</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -8,14 +8,14 @@
     <ul class="navbar-nav">
       <% Category.order(:position).each do |category| %>
         <li class="nav-item active">
-         <a class="nav-link <%= params[:q].to_i == category.id ? "active" : "" %>" href="<%= items_path(q: category.id, type: "category_id_eq", query: query_string(search: nil, category: category.id, user: nil)) %>"><%= category.title %></a>
+         <a class="nav-link text-danger <%= params[:q].to_i == category.id ? "active" : "" %>" href="<%= items_path(q: category.id, type: "category_id_eq", query: query_string(search: nil, category: category.id, user: nil)) %>"><%= category.title %></a>
         </li>
       <% end %>
     </ul>
      <ul class="navbar-nav">
       <% if current_user %>
         <li class="nav-item dropdown mr-3">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link dropdown-toggle text-danger" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             나의 페이지
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">

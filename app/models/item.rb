@@ -8,6 +8,7 @@ class Item < ApplicationRecord
 
   has_many :line_items, dependent: :nullify # 상품 삭제되도 주문목록에는 남겨야함
   has_many :comments, dependent: :destroy # 상품 삭제되면 더이상 댓글 필요 없음
+  has_many :likes, as: :likable, dependent: :destroy
 
   def self.generate_items
     image_path = '/public/image/'

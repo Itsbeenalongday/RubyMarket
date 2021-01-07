@@ -14,3 +14,13 @@
  */
 
  @import "bootstrap";
+ @import 'font-awesome.css';
+ @import 'font_awesome5_webfont';
+
+ .alert{
+  position: fixed;
+  top: 1rem;
+  left: 10px;
+  width: 90%;
+  z-index: 1000;
+}

@@ -7,6 +7,7 @@ class User < ApplicationRecord
   has_many :comments, dependent: :nullify # 회원탈퇴 하더라도 댓글 남기기
   has_many :orders, dependent: :nullify # 회원탈퇴 하더라도 주문 남기기 
   has_many :items, dependent: :nullify # 회원탈퇴 하더라도 상품 남기기
+  has_many :likes, dependent: :destroy # 좋아요는 
 
   def self.generate_users
     User.destroy_all

@@ -9,6 +9,10 @@ Rails.application.routes.draw do
       get :add
     end
 
+    member do
+      get :toggle_like
+    end
+
     resources :comments
   
 	end

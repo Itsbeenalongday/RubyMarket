@@ -1,7 +1,8 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, except: [:index]
-  before_action :load_item, only: [:show, :add]
+  before_action :load_item, only: [:show, :add, :toggle_like]
   before_action :safe_load_item, only: [:edit, :update, :destroy]
+  protect_from_forgery except: :show
   
   def index
     order = { '등록 순' => :created_at, '가격 순' => :price, '이름 순' => :title }
@@ -26,9 +27,22 @@ class ItemsController < ApplicationController
     @item = Item.update item_params
     redirect_to root_path, notice: "상품을 성공적으로 수정하였습니다."
   end
+
+  def toggle_like
+    @like = current_user.likes.find_or_initialize_by(likable_id: @item.id, likable_type: "Item")
+    @like.new_record? ? @like.save : @like.destroy
+    puts @like.destroyed? ? true : false
+    render 'shared/likable.js', locals: { like: @like.destroyed? ? true : false }
+  end
   
   def show
     @comments = @item.comments.page(params[:page])
+    @like = current_user.likes.find_by(likable_id: @item.id, likable_type: "Item")
+  end
+
+  def destroy
+    @item.destroy
+    redirect_to root_path, notice: "상품을 성공적으로 삭제하였습니다."
   end
 
 
@@ -38,11 +52,6 @@ class ItemsController < ApplicationController
     @line_item = @order.line_items.find_or_initialize_by(item: @item)
     @line_item.quantity.nil? ? @line_item.update(quantity: params[:quantity], price: @item.price) : @line_item.update(quantity: @line_item.quantity + params[:quantity].to_i)
     @line_item.set_order_total
-  end
-  
-  # routing에 추가 member 액션임
-  def toggle_like
-  
   end
 
   private  

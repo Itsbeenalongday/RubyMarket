@@ -6,9 +6,14 @@
   <p class="ml-2 mb-0 mt-2" id="comment-<%= comment.id %>-body"><%= comment.body %></p>
   <div id="button-group-<%= comment.id %>">
     <p class="text-right">
+      <span class="mr-2">
+        <%= link_to item_comment_path(item_id: item.id, id:comment.id), remote: true do %>
+          <%# render 'shared/likable' %>
+        <%end%>
+      </span>
       <% if current_user.id == comment.user_id %>
-          <%= link_to "수정", edit_item_comment_path(item_id: item.id, id: comment.id), remote: true, class: "btn btn-outline-danger btn-sm" %>
-          <%= link_to "삭제", item_comment_path(item_id: item.id, id: comment.id), method: :delete, remote: true, data:{ confirm: "정말로 삭제하시겠습니까?" }, class:"btn btn-outline-danger btn-sm"%>
+        <%= link_to "수정", edit_item_comment_path(item_id: item.id, id: comment.id), remote: true, class: "btn btn-outline-danger btn-sm mb-2" %>
+        <%= link_to "삭제", item_comment_path(item_id: item.id, id: comment.id), method: :delete, remote: true, data:{ confirm: "정말로 삭제하시겠습니까?" }, class:"btn btn-outline-danger btn-sm mb-2"%>
       <% end %>
     </p>
   </div>

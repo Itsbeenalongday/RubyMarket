@@ -1,12 +1,12 @@
 <div class="container my-5">
   <% if params[:type] == "category_id_eq" %>
-    <h2 class="text-center"><%= Category.find_by(id: params[:q]).title %></h2>
+    <h2 class="text-center text-danger"><%= Category.find_by(id: params[:q]).title %></h2>
   <% elsif params[:type] == "user_id_eq" %>
-    <h2 class="text-center">내 상품</h2>
+    <h2 class="text-center text-danger">내 상품</h2>
   <% elsif params[:type] == "search" %>
-    <h2 class="text-center">검색 결과</h2>
+    <h2 class="text-center text-danger">검색 결과</h2>
   <% else %>
-    <h2 class="text-center">판매중인 상품들</h2>
+    <h2 class="text-center text-danger">판매중인 상품들</h2>
   <% end %>
   <hr/>
   <div class="row mb-4">
