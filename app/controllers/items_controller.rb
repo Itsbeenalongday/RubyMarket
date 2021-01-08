@@ -5,10 +5,11 @@ class ItemsController < ApplicationController
   protect_from_forgery except: :show
   
   def index
+    #byebug
     order = { "최신순" => "created_at DESC", "높은가격순" => "price DESC", "이름순" => "title", "낮은가격순" => "price" }
-    q = params[:query] if params[:query]
-    q = eval(params[:query]) if q.instance_of?(String) # eval은 문자열을 hash로 바꾸는 함수, hidden field에서 string을 넘어오기 때문에 캐스팅 필요
-    q ? @items = Item.ransack(title_or_description_cont: q[:title_or_description], category_id_eq: q[:category_id], user_id_eq: q[:user_id]).result : @items = Item.all
+    query = params[:query] if params[:query]
+    query = { "title_or_description" => params[:s], "category_id" => nil, "user_id" => nil } if query=="query"
+    query ? @items = Item.ransack(title_or_description_cont: query["title_or_description"], category_id_eq: query["category_id"], user_id_eq: query["user_id"]).result : @items = Item.all
     @items = @items.where(id: current_user.likes.where(likable_id: @items, likable_type: "Item").map(&:likable_id)) if params[:type] == "my" && current_user
     params[:order] ? @items = @items.order(order[params[:order]]).page(params[:page]) : @items = @items.page(params[:page])
   end
@@ -32,12 +33,14 @@ class ItemsController < ApplicationController
   def toggle_like
     @like = current_user.likes.find_or_initialize_by(likable_id: @item.id, likable_type: "Item")
     @like.new_record? ? @like.save : @like.destroy
-    render 'items/likable.js', locals: { like: @like.destroyed? ? true : false }
+    @likes = @item.likes.count
+    render 'items/likable.js', locals: { like: @like.destroyed? ? true : false, likes: @likes }
   end
   
   def show
     @comments = @item.comments.page(params[:page])
     @like = current_user.likes.find_by(likable_id: @item.id, likable_type: "Item")
+    @likes = @item.likes.count
   end
 
   def destroy
@@ -46,12 +49,19 @@ class ItemsController < ApplicationController
   end
 
 
-  def add 
-    @order = get_cart
+  def add
+    @cart = get_cart
     # 현재 아이템을 담고있는 주문목록이 있는지 확인 없으면 만든다.
-    @line_item = @order.line_items.find_or_initialize_by(item: @item)
-    @line_item.quantity.nil? ? @line_item.update(quantity: params[:quantity], price: @item.price) : @line_item.update(quantity: @line_item.quantity + params[:quantity].to_i)
-    #@line_item.set_order_total
+    @line_item = @cart.line_items.find_or_initialize_by(item: @item)
+    if @line_item.new_record? # 새로운 주문항목
+      @line_item.update(quantity: params[:quantity], price: @item.price*params[:quantity].to_i)
+      @line_item.order.total = 0 if @line_item.order.total.nil? # 첫 주문 상품
+      @line_item.order.update(total: @line_item.order.total + @item.price*params[:quantity].to_i)
+    else # 기존 항목 추가됨
+      previous_quantity = @line_item.quantity
+      @line_item.update(quantity: @line_item.quantity + params[:quantity].to_i, price: @item.price * (@line_item.quantity + params[:quantity].to_i))
+      @line_item.order.update(total: @line_item.order.total - (previous_quantity * @item.price) + @item.price * (previous_quantity + params[:quantity].to_i))
+    end
   end
 
   private  

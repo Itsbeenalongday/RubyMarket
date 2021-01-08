@@ -35,6 +35,9 @@
       <%= render 'items/likable', like: @like ? false : true %>
     </div>
   <% end %>
+  <div class="d-flex mt-5 mb-3 ml-1 text-danger" id="item-likes">
+    <h4 class="ml-auto p-2">이 상품을 좋아하는 사람들 <%= @likes %> 명<h4>
+  </div>
 </div>
 <div class="container my-5">
   <div class="row">

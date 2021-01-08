@@ -1,10 +1,10 @@
-<tr id="editable-<%= @line_item.id %>-parent">
+<tr class="text-center text-danger" id="editable-<%= @line_item.id %>-parent">
   <td><%= Item.find_by(id: @line_item.item_id).title %></td>
-  <td><%= @line_item.item.price %>원</td>
+  <td><%= number_with_delimiter @line_item.item.price %>원</td>
   <td id="editable-<%= @line_item.id %>-quantity"><%= @line_item.quantity %>개</td>
-  <td id="editable-<%= @line_item.id %>-price"><%= Item.find_by(id: @line_item.item_id).price * @line_item.quantity%>원</td>
+  <td id="editable-<%= @line_item.id %>-price"><%= number_with_delimiter Item.find_by(id: @line_item.item_id).price * @line_item.quantity%>원</td>
   <td>
     <%= link_to "수정",  edit_order_line_item_path(order_id: @line_item.order_id, id: @line_item), remote: true, class: "btn btn-outline-danger" %>
-    <%= link_to "삭제",  order_line_item_path(order_id: @line_item.order_id, id: @line_item), remote: true, method: :destroy, class: "btn btn-outline-danger" %>
+    <%= link_to "삭제",  order_line_item_path(order_id: @line_item.order_id, id: @line_item), remote: true, method: :delete, class: "btn btn-outline-danger" %>
   </td>
 </tr>

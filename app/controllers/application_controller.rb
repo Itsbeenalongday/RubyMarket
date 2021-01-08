@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   #before_action :configure_permitted_parameters, if: :devise_controller?
   
   def get_cart
-    @order = current_user.orders.cart.first_or_create
+    @cart = current_user.orders.cart.first_or_create
   end
 
   def pretty_date(time = nil)

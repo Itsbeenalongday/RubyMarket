@@ -1,2 +1,4 @@
 var html = "<%= j(render(partial: 'line_items/update')) %>"
+$('#editable-<%= @line_item.id %>-quantity').parent().addClass("<%= @index % 2 ? "table-active" : "table-default" %>")
 $("#editable-<%= @line_item.id %>-parent").replaceWith(html)
+$("#total-box").text("총 결제액: <%= number_with_delimiter @line_item.order.total %>원")

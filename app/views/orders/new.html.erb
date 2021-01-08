@@ -10,25 +10,28 @@
         <th>취소 및 삭제</th>
       </thead>
       <tbody>
-        <% @order.line_items.each_with_index do | line_item, index | %>
-        <tr class="<%= index % 2 == 0 ? "table-active" : "table-default" %>" id="editable-<%= line_item.id %>-parent">
+        <% @cart.line_items.each_with_index do | line_item, index | %>
+        <tr class="<%= index % 2 == 0  ? "table-active" : "table-default" %>" id="editable-<%= line_item.id %>-parent">
           <td><%= Item.find_by(id: line_item.item_id).title %></td>
           <td><%= line_item.item.price %>원</td>
           <td id="editable-<%= line_item.id %>-quantity"><%= line_item.quantity %>개</td>
           <td id="editable-<%= line_item.id %>-price"><%= number_with_delimiter Item.find_by(id: line_item.item).price* line_item.quantity%>원</td>
           <td>
-            <%= link_to "수정",  edit_order_line_item_path(order_id: @order, id: line_item), remote: true, class: "btn btn-outline-danger" %>
-            <%= link_to "삭제",  order_line_item_path(order_id: @order, id: line_item), remote: true, method: :delete, class: "btn btn-outline-danger" %>
+            <%= link_to "수정",  edit_order_line_item_path(order_id: @cart, id: line_item, index: index), remote: true, class: "btn btn-outline-danger" %>
+            <%= link_to "삭제",  order_line_item_path(order_id: @cart, id: line_item), remote: true, method: :delete, class: "btn btn-outline-danger" %>
           </td>
         </tr>
         <% end %>
       </tbody>
     </table>
   </div>
-  <div id="total">
-    <%= @order.total %>
+  <div id="total-box" class="text-right text-danger">
+    총 결제액: <%= number_with_delimiter @cart.total %>원
   </div>
-  <%= link_to "결제 하러 가기", edit_order_path(@order), class: "btn btn-outline-danger float-right" if @order.line_items.present? %>
+  <hr/>
+  <div id="pay-button">
+    <%= link_to "결제 하러 가기", edit_order_path(@cart), class: "btn btn-outline-danger float-right" if @cart.line_items.present? %>
+  </div>
 </div>
 
 <script>

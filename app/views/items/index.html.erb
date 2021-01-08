@@ -25,9 +25,9 @@
     </div>
     <%= form_tag request.parameters, method: :get do %>
       <div class="form-inline col align-self-end">   
-        <%= text_field_tag :search, params[:search], class: "form-control mr-1", placeholder: "상품 명 및 설명 검색" %>
+        <%= text_field_tag 's', params[:s], class: "form-control mr-1", placeholder: "상품 명 및 설명 검색" %>
         <%= hidden_field_tag :type, "search" %>
-        <%= hidden_field_tag :query, "", {id: "search-query"} %>
+        <%= hidden_field_tag :query, "query", {id: "search-query"} %>
         <%= submit_tag "검색", class: "btn btn-outline-danger mr-1", id: "search-button" %>
       </div>
     <% end %>
@@ -59,9 +59,3 @@
     <%= paginate @items %>
   </div>
 </div>
-
-<script>
-  $('#search-button').click(function(){
-    $('#search-query').val("{title_or_description: " + $("#search").val() + ", category_id: \"\", user_id: \"\"}");
-  })
-</script>

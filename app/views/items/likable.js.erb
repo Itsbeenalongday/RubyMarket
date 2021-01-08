@@ -1,2 +1,3 @@
-var html = "<%= j(render(partial: 'items/likable', locals: { like: @like.destroyed? ? true : false })) %>"
+var html = "<%= j(render(partial: 'items/likable', locals: { like: @like.destroyed? ? true : false, likes: @likes })) %>"
 $('#item-like').html(html)
+$('#item-likes').html("<h4 class=\"ml-auto p-2\">이 상품을 좋아하는 사람들 <%= @likes %> 명<h4>")

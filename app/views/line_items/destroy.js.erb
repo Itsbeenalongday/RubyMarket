@@ -1,1 +1,5 @@
 $("#editable-<%= @line_item.id%>-parent").remove()
+$("#total-box").text("총 결제액: <%= number_with_delimiter @line_item.order.total %>원")
+if("<%= @line_item.order.total %>" == "0"){
+  $("#pay-button").hide()
+}
