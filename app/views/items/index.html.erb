@@ -10,16 +10,17 @@
   <% else %>
     <h2 class="text-center text-danger">상품 전체</h2>
   <% end %>
-  <hr/>
+  <hr class="border border-danger">
   <div class="row mb-4">
     <div class="dropdown mr-1 col align-self-start">
       <button type="button" class="btn btn-outline-danger dropdown-toggle" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
         정렬 기준
       </button>
       <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
-        <%= link_to "가격 순", request.parameters.merge(order: "가격 순"), class: "dropdown-item text-danger" %>
-        <%= link_to "등록 순", request.parameters.merge(order: "등록 순"), class: "dropdown-item text-danger" %>
-        <%= link_to "이름 순", request.parameters.merge(order: "이름 순"), class: "dropdown-item text-danger" %>
+        <%= link_to "낮은가격순", request.parameters.merge(order: "낮은가격순"), class: "dropdown-item text-danger" %>
+        <%= link_to "높은가격순", request.parameters.merge(order: "높은가격순"), class: "dropdown-item text-danger" %>
+        <%= link_to "최신순", request.parameters.merge(order: "최신순"), class: "dropdown-item text-danger" %>
+        <%= link_to "이름순", request.parameters.merge(order: "이름순"), class: "dropdown-item text-danger" %>
       </div>
     </div>
     <%= form_tag request.parameters, method: :get do %>
@@ -37,10 +38,13 @@
         <div class="card h-100">
           <img src="<%= item.image.url(:thumb) if item.image? %>" class="card-img-top" alt="...">
           <div class="card-body">
-            <h5 class="card-title"><%= item.title %></h5>
-            <p class="card-text"><%= item.description %></p>
+            <h5 class="card-title text-danger"><%= item.title %></h5>
+            <p class="card-text text-danger"><%= item.description %></p>
           </div>
-          <div class="card-footer">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item text-danger text-right"><%= number_with_delimiter item.price%>원</li>
+          </ul>
+          <div class="card-footer text-center">
             <%= link_to "상세보기", item_path(item.id), class: "btn btn-outline-danger btn-sm" %>
             <% if item.user == current_user %>
               <%= link_to "삭제", item_path(item), method: :delete, data: {confirm: "정말로 삭제하시겠습니까?" },class: "btn btn-outline-danger btn-sm" %>

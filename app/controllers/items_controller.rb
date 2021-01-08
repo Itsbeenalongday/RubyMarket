@@ -5,7 +5,7 @@ class ItemsController < ApplicationController
   protect_from_forgery except: :show
   
   def index
-    order = { '등록 순' => :created_at, '가격 순' => :price, '이름 순' => :title }
+    order = { "최신순" => "created_at DESC", "높은가격순" => "price DESC", "이름순" => "title", "낮은가격순" => "price" }
     q = params[:query] if params[:query]
     q = eval(params[:query]) if q.instance_of?(String) # eval은 문자열을 hash로 바꾸는 함수, hidden field에서 string을 넘어오기 때문에 캐스팅 필요
     q ? @items = Item.ransack(title_or_description_cont: q[:title_or_description], category_id_eq: q[:category_id], user_id_eq: q[:user_id]).result : @items = Item.all
@@ -25,7 +25,7 @@ class ItemsController < ApplicationController
   def edit;end
   
   def update
-    @item = Item.update item_params
+    @item = @item.update item_params
     redirect_to root_path, notice: "상품을 성공적으로 수정하였습니다."
   end
 
@@ -51,7 +51,7 @@ class ItemsController < ApplicationController
     # 현재 아이템을 담고있는 주문목록이 있는지 확인 없으면 만든다.
     @line_item = @order.line_items.find_or_initialize_by(item: @item)
     @line_item.quantity.nil? ? @line_item.update(quantity: params[:quantity], price: @item.price) : @line_item.update(quantity: @line_item.quantity + params[:quantity].to_i)
-    @line_item.set_order_total
+    #@line_item.set_order_total
   end
 
   private  

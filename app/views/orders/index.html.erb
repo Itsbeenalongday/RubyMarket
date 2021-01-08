@@ -1,6 +1,26 @@
-결제완료된 주문들을 보여주는 내 주문목록 페이지
-<% @orders.each do |order| %>
-  <%= order.paid_at %>
-  <%= order.total %>
-   <br/>
-<% end %>
+<div class="container my-5">
+  <h2 class="mb-4 text-center text-danger">결제완료된 주문 목록</h2>
+  <div class="row">
+    <table class="table">
+      <thead>
+        <th>주문 번호</th>
+        <th>결제완료일</th>
+        <th>총합</th>
+      </thead>
+      <tbody>
+        <% @orders.each_with_index do |order, index| %>
+        <tr class="<%= index % 2 == 0 ? "table-active" : "table-default" %>">
+          <td><%= order.number %></td>
+          <td><%= pretty_date(order.paid_at)%></td>
+          <td><%= number_with_delimiter order.total %>원</td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+    $('th').addClass('text-center text-danger')
+    $('td').addClass('text-center text-danger')
+</script>

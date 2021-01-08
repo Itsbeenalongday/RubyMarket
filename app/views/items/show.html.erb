@@ -9,6 +9,13 @@
         <h5 class="card-title text-center"><%= @item.title %></h5>
         <p class="card-text"><%= @item.description %></p>
       </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item text-danger d-flex">
+          <span class="p-2">상품 원가: <%= number_with_delimiter @item.price%>원</span>
+          <span class="ml-auto p-2">해당 항목 총 결제 금액</span>
+        </li>
+        <li class="list-group-item text-danger text-right" id="price-box"><%= number_with_delimiter @item.price%>원</li>
+      </ul>
       <div class="card-footer">
         <div class="input-group mb-3">
           <div class="input-group-prepend">
@@ -51,11 +58,17 @@
   var amount;
   $('#down').click(function(){
     amount = +$('#quan').val();
-    amount*1-1 <= 0 ? alert('더이상 줄일 수 없습니다.') : amount = +$('#quan').val(amount*1-1);
+    amount*1-1 <= 0 ? alert('더이상 줄일 수 없습니다.') : (function(){ 
+      amount = +$('#quan').val(amount*1-1);
+      price = <%= @item.price %>
+      $('#price-box').text(String(+$('#quan').val()*price).replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'원')
+      })();
   });
   $('#up').click(function(){
     amount = +$('#quan').val();
     amount = +$('#quan').val(amount*1+1);
+    price = <%= @item.price %>
+    $('#price-box').text(String(+$('#quan').val()*price).replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'원')
   });
   $('#add_cart').on('click',function(){
       amount = +$('#quan').val();
