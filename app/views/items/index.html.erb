@@ -34,18 +34,25 @@
   </div>
   <div class="row" id="items-box">
     <% @items.each do |item| %>
-      <div class="col-md-3 mb-4">
+      <div class="col-md-4 mb-4">
         <div class="card h-100">
           <img src="<%= item.image.url(:thumb) if item.image? %>" class="card-img-top" alt="...">
           <div class="card-body">
-            <h5 class="card-title text-danger"><%= item.title %></h5>
-            <p class="card-text text-danger"><%= item.description %></p>
+            <h5 class="card-title text-danger text-center"><%= item.title %></h5>
+            <p class="card-text text-danger"><%= item.description.truncate(50) %></p>
           </div>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item text-danger text-right"><%= number_with_delimiter item.price%>원</li>
+            <li class="list-group-item text-danger text-right d-flex">
+              <% if item.user %>
+                <span class="p-2">판매자: <%= item.user.name %></span>
+                <span class="ml-auto p-2"><%= number_with_delimiter item.price%>원</span>
+              <% else %>
+                더 이상 판매되지 않는 상품입니다.
+              <% end %>
+            </li>
           </ul>
           <div class="card-footer text-center">
-            <%= link_to "상세보기", item_path(item.id), class: "btn btn-outline-danger btn-sm" %>
+            <%= link_to "상세보기", item_path(item.id), class: "btn btn-outline-danger btn-sm" if item.user %>
             <% if item.user == current_user %>
               <%= link_to "삭제", item_path(item), method: :delete, data: {confirm: "정말로 삭제하시겠습니까?" },class: "btn btn-outline-danger btn-sm" %>
               <%= link_to "수정", edit_item_path(item), class: "btn btn-outline-danger btn-sm" %>

@@ -9,6 +9,12 @@ class User < ApplicationRecord
   has_many :items, dependent: :nullify # 회원탈퇴 하더라도 상품 남기기
   has_many :likes, dependent: :destroy # 좋아요는 
 
+  after_destroy :set_order_status
+
+  def set_order_status
+    self.orders.cart.destroy_all if self.orders.cart if self.orders # 장바구니 날리기
+  end
+
   def self.generate_users
     User.destroy_all
     emails = ['dbtjdals1771@ajou.ac.kr', 'tjdals1771@gmail.com', 'codingmachine1771@gmail.com']

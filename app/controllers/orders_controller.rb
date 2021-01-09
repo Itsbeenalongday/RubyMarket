@@ -8,7 +8,7 @@ class OrdersController < ApplicationController
 
   def update
     @order.paid!
-    @order.update(paid_at: Time.now, number: rand(1_000_000_000..9_999_999_999))
+    @order.update(paid_at: Time.now, number: rand(1_000_000_000..9_999_999_999), zipcode: params[:zipcode], address1: params[:address1], address2: params[:address2])
     redirect_to root_path, notice: "주문이 완료되었습니다."
   end
 

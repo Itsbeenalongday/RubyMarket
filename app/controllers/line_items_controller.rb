@@ -4,7 +4,6 @@ class LineItemsController < ApplicationController
   def destroy
     order = @line_item.order
     @line_item.destroy
-    @line_item.order.update(total: @line_item.order.line_items.sum("price"))
   end
 
   def update

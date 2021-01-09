@@ -1,7 +1,7 @@
 <div class="comment-children mt-10" id="comment-<%=comment.id%>-children">
   <div class="row mx-1">
-      <h6 style="color: navy"><%= User.find_by(id: comment.user_id).name %></h6>
-      <small class="text-color-gray ml-2"><%=  pretty_time comment.created_at %></small>
+    <h6 style="color: navy"><%= comment.user ? User.find_by(id: comment.user_id).name : "탈퇴한 회원" %></h6>
+    <small class="text-color-gray ml-2"><%=  pretty_time comment.created_at %></small>
   </div>
   <p class="ml-2 mb-0 mt-2" id="comment-<%= comment.id %>-body"><%= comment.body %></p>
   <div id="button-group-<%= comment.id %>">

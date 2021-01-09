@@ -9,7 +9,7 @@ class ItemsController < ApplicationController
     order = { "최신순" => "created_at DESC", "높은가격순" => "price DESC", "이름순" => "title", "낮은가격순" => "price" }
     query = params[:query] if params[:query]
     query = { "title_or_description" => params[:s], "category_id" => nil, "user_id" => nil } if query=="query"
-    query ? @items = Item.ransack(title_or_description_cont: query["title_or_description"], category_id_eq: query["category_id"], user_id_eq: query["user_id"]).result : @items = Item.all
+    query ? @items = Item.ransack(title_or_description_i_cont: query["title_or_description"], category_id_eq: query["category_id"], user_id_eq: query["user_id"]).result : @items = Item.all
     @items = @items.where(id: current_user.likes.where(likable_id: @items, likable_type: "Item").map(&:likable_id)) if params[:type] == "my" && current_user
     params[:order] ? @items = @items.order(order[params[:order]]).page(params[:page]) : @items = @items.page(params[:page])
   end
@@ -44,6 +44,11 @@ class ItemsController < ApplicationController
   end
 
   def destroy
+    if @item.line_items.present?
+      @item.line_items.each do |line_item|
+        line_item.order.update(total: line_item.order.total - (line_item.quantity * @item.price)) if line_item.order.cart?
+      end
+    end
     @item.destroy
     redirect_to root_path, notice: "상품을 성공적으로 삭제하였습니다."
   end

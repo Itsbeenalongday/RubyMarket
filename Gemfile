@@ -70,3 +70,5 @@ gem 'carrierwave'
 gem 'mini_magick'
 
 gem 'rename'
+
+gem 'faker'

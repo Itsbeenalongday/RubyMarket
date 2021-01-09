@@ -24,6 +24,7 @@ ko:
     updated_at: 수정일
     name: 이름
     email: 이메일
+    phone: 휴대전화 번호
 
   activerecord:
     models:

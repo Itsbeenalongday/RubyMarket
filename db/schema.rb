@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_07_054208) do
+ActiveRecord::Schema.define(version: 2021_01_09_102201) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 2021_01_07_054208) do
 
   create_table "comments", force: :cascade do |t|
     t.string "body"
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.bigint "item_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 2021_01_07_054208) do
     t.string "description"
     t.integer "price"
     t.string "image"
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.bigint "category_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -58,7 +58,7 @@ ActiveRecord::Schema.define(version: 2021_01_07_054208) do
   end
 
   create_table "line_items", force: :cascade do |t|
-    t.bigint "item_id", null: false
+    t.bigint "item_id"
     t.bigint "order_id", null: false
     t.integer "quantity"
     t.integer "price"
@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(version: 2021_01_07_054208) do
     t.datetime "cancled_at"
     t.integer "status"
     t.integer "total"
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.string "number"
     t.string "zipcode"
     t.string "address1"
@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(version: 2021_01_07_054208) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "name"
+    t.string "phone"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
