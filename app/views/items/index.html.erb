@@ -35,7 +35,7 @@
   <div class="row" id="items-box">
     <% @items.each do |item| %>
       <div class="col-md-4 mb-4">
-        <div class="card h-100">
+        <div class="card h-100 shadow">
           <img src="<%= item.image.url(:thumb) if item.image? %>" class="card-img-top" alt="...">
           <div class="card-body">
             <h5 class="card-title text-danger text-center"><%= item.title %></h5>
@@ -51,13 +51,13 @@
               <% end %>
             </li>
           </ul>
-          <div class="card-footer text-center">
-            <%= link_to "상세보기", item_path(item.id), class: "btn btn-outline-danger btn-sm" if item.user %>
-            <% if item.user == current_user %>
+          <% if item.user && item.user == current_user %>
+            <div class="card-footer text-center">
+              <%= link_to "상세보기", item_path(item.id), class: "btn btn-outline-danger btn-sm" if item.user %>
               <%= link_to "삭제", item_path(item), method: :delete, data: {confirm: "정말로 삭제하시겠습니까?" },class: "btn btn-outline-danger btn-sm" %>
               <%= link_to "수정", edit_item_path(item), class: "btn btn-outline-danger btn-sm" %>
-            <% end %>
-          </div>
+            </div>
+          <% end %>
         </div>
       </div>
     <% end %>

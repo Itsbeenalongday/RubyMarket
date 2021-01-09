@@ -2,33 +2,35 @@
   <div class="row">
     <div class="card col-md-6  offset-md-3 p-5">
       <% if item.present? %>
+        <h2 class="text-center text-danger"><%= item.new_record? ? "상품 등록" : "상품 수정" %></h2>
+        <hr/>
         <%= form_for item do |f| %>
           <div class="form-group">
-            <%= f.label :title %>
-            <%= f.text_field :title, class: "form-control" %>
+            <%= f.label :title, class: "text-danger" %>
+            <%= f.text_field :title, class: "form-control", placeholder: "상품명 입력" %>
           </div>
           <div class="form-group">
-            <%= f.label :description %>
-            <%= f.text_area :description, class: "form-control" %>
+            <%= f.label :description, class: "text-danger" %>
+            <%= f.text_area :description, class: "form-control", rows: "15", placeholder: "상품 상세 입력" %>
           </div>
           <div class="form-group">
-            <%= f.label :price %>
-            <%= f.text_field :price, class: "form-control" %>
+            <%= f.label :price, class: "text-danger" %>
+            <%= f.text_field :price, class: "form-control", placeholder: "상품 가격 입력" %>
           </div>
           <div class="form-group">
-            <%= f.label :image %>
-            <%= f.file_field :image, class: "form-control" %>
+            <%= f.label :category_id, class: "text-danger" %>
+            <%= f.select :category_id, options_for_select(Category.order(:position).map{|category| [category.title, category.id]}), {}, class: "form-control text-danger" %>
           </div>
           <div class="form-group">
-            <%= f.label :category_id %>
-            <%= f.select :category_id, options_for_select(Category.order(:position).map{|category| [category.title, category.id]}), {}, class: "form-control" %>
+            <%= f.label :image, class: "text-danger" %>
+            <%= f.file_field :image, class: "form-control text-danger" %>
           </div>
           <%= f.hidden_field :user_id, value: current_user.id %>
           <!-- 새로운 기록인지 아닌지를 판단하여 등록과 수정을 나눠서 표출가능 -->
           <%= f.submit "#{f.object.new_record? ? '생성' : '수정'}", class: "btn btn-outline-danger float-right" %>
         <% end %>
       <% else %>
-        <span class="text-center">권한이 없습니다.</span>
+        <span class="text-center text-danger">권한이 없습니다.</span> <%# 다른사람이 상품의 id로 접근하려 할 때 대비 %>
       <% end %>
     </div>
   </div>

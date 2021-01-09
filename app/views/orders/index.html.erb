@@ -6,6 +6,7 @@
         <th>주문 번호</th>
         <th>결제완료일</th>
         <th>총합</th>
+        <th>자세히보기</th>
       </thead>
       <tbody>
         <% @orders.each_with_index do |order, index| %>
@@ -13,6 +14,25 @@
           <td><%= order.number %></td>
           <td><%= pretty_date(order.paid_at)%></td>
           <td><%= number_with_delimiter order.total %>원</td>
+          <td class="accordion">
+            <button class="btn btn-link btn-block text-center text-danger" type="button" data-toggle="collapse" data-target="#content-<%=order.id %>" aria-expanded="true" aria-controls="content-<%=order.id %>">
+              주문 상세
+            </button>
+            <div class="card collapse" id="content-<%=order.id %>" data-parent="#content-<%=order.id %>">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex"><span class="p-2">배송지 우편번호: </span><span class="ml-auto p-2"><%= order.zipcode %></span></li>
+              <li class="list-group-item d-flex"><span class="p-2">배송지 주소: </span><span class="ml-auto p-2"><%= order.address1 %></li>
+              <li class="list-group-item d-flex"><span class="p-2">배송지 우편번호: </span><span class="ml-auto p-2"><%= order.address2 %></li>
+              <% order.line_items.each_with_index do | line_item, index |%>
+                <% if line_item.item_id %>
+                  <li class="list-group-item d-flex"><span class="p-2"><%=index%>번 주문상품: </span><span class="ml-auto p-2"><%= link_to "#{line_item.item.title}", item_path(line_item.item) %><span class="ml-auto p-2"><%=line_item.quantity%>개</span></li>
+                <% else %>
+                  <li class="list-group-item d-flex"><span class="p-2"><%=index%>번 주문상품: </span><span class="ml-auto p-2">판매가 종료된 상품입니다.</span></li>
+                <% end %>
+              <% end %>
+            </ul>
+          </div>
+          </td>
         </tr>
         <% end %>
       </tbody>

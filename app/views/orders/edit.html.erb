@@ -4,15 +4,15 @@
       <div class="card p-5">
         <%= form_for @order do |f| %>
           <div class="form-group">
-            <%= f.label :zipcode %>
+            <%= f.label :zipcode, class: "text-danger" %>
             <%= f.text_field :zipcode, class: "form-control" %>
           </div>
           <div class="form-group">
-            <%= f.label :address1 %>
+            <%= f.label :address1, class: "text-danger" %>
             <%= f.text_area :address1, class: "form-control" %>
           </div>
           <div class="form-group">
-            <%= f.label :address2 %>
+            <%= f.label :address2, class: "text-danger" %>
             <%= f.text_area :address2, class: "form-control" %>
           </div>
           <%= f.submit "주문 완료하기", class: "btn btn-outline-danger float-right" %>
