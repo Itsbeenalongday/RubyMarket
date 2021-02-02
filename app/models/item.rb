@@ -18,8 +18,6 @@ class Item < ApplicationRecord
     end
   end
 
-
-
   def self.generate_items
     image_path = '/public/image/'
     image_files = ['image1.jpg','image2.jpg','image3.jpg','image4.jpg','image5.jpg']
