@@ -1,0 +1,48 @@
+<div class="container my-5">
+  <h2 class="mb-4 text-center text-danger">장바구니</h2>
+  <div class="row">
+    <table class="table table-striped">
+      <thead>
+        <th>주문 상품</th>
+        <th>상품 가격</th>
+        <th>주문 수량</th>
+        <th>주문 가격</th>
+        <th>취소 및 삭제</th>
+      </thead>
+      <tbody>
+        <% @cart.line_items.each_with_index do | line_item, index | %>
+          <tr class="<%= index % 2 == 0  ? "table-active" : "table-default" %>" id="editable-<%= line_item.id %>-parent">
+            <% if line_item.item %>
+              <td><%= Item.find_by(id: line_item.item_id).title %></td>
+              <td><%= line_item.item.price %>원</td>
+              <td id="editable-<%= line_item.id %>-quantity"><%= line_item.quantity %>개</td>
+              <td id="editable-<%= line_item.id %>-price"><%= number_with_delimiter Item.find_by(id: line_item.item).price* line_item.quantity%>원</td>
+              <td>
+                <%= link_to "수정",  edit_order_line_item_path(order_id: @cart, id: line_item, index: index), remote: true, class: "btn btn-outline-danger" %>
+                <%= link_to "삭제",  order_line_item_path(order_id: @cart, id: line_item), remote: true, method: :delete, class: "btn btn-outline-danger" %>
+              </td>
+            <% else %>
+              <td>판매자에 의해 삭제된 상품</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td><%= link_to "목록에서 지우기",  order_line_item_path(order_id: @cart, id: line_item), remote: true, method: :delete, class: "btn btn-outline-danger" %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div id="total-box" class="text-right text-danger">
+    총 결제액: <%= number_with_delimiter @cart.total %>원
+  </div>
+  <hr/>
+  <div id="pay-button">
+    <%= link_to "결제 하러 가기", edit_order_path(@cart), class: "btn btn-outline-danger float-right" if @cart.line_items.present? %>
+  </div>
+</div>
+
+<script>
+  $('th').addClass('text-center text-danger')
+  $('td').addClass('text-center text-danger')
+</script>

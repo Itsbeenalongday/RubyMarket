@@ -1,0 +1,73 @@
+<div class="container my-5">
+  <% if params[:type] == "category" %>
+    <h2 class="text-center text-danger"><%= Category.find_by(id: params.dig(:q, :category_id_eq)).title %></h2>
+  <% elsif params[:type] == "own" %>
+    <h2 class="text-center text-danger">내 상품</h2>
+  <% elsif params[:type] == "search" %>
+    <h2 class="text-center text-danger">검색 결과</h2>
+  <% elsif params[:type] == "like" %>
+    <h2 class="text-center text-danger">내가 찜한 상품들</h2>
+  <% else %>
+    <h2 class="text-center text-danger">상품 전체</h2>
+  <% end %>
+  <hr class="border border-danger">
+  <div class="row mb-4">
+    <div class="dropdown mr-1 col align-self-start">
+      <button type="button" class="btn btn-outline-danger dropdown-toggle" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
+        정렬 기준
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
+        <%= link_to "낮은가격순", request.parameters.merge(order: 'price ASC'), class: "dropdown-item text-danger" %>
+        <%= link_to "높은가격순", request.parameters.merge(order: 'price DESC'), class: "dropdown-item text-danger" %>
+        <%= link_to "최신순", request.parameters.merge(order: 'created_at DESC'), class: "dropdown-item text-danger" %>
+        <%= link_to "이름순", request.parameters.merge(order: "title ASC"), class: "dropdown-item text-danger" %>
+      </div>
+    </div>
+    <%= form_tag request.parameters, method: :get do %>
+      <div class="form-inline col align-self-end">   
+        <%= text_field_tag "q[title_or_description_cont]","", class: "form-control mr-1", placeholder: "상품 명 및 설명 검색" %>
+        <%= hidden_field_tag :type, "search" %>
+        <%= submit_tag "검색", class: "btn btn-outline-danger mr-1", id: "search-button" %>
+      </div>
+    <% end %>
+  </div>
+  <div class="row" id="items-box">
+    <% @items.each do |item| %>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow">
+          <img src="<%= item.image.url(:thumb) if item.image? %>" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title text-danger text-center"><%= item.title %></h5>
+            <p class="card-text text-danger"><%= item.description.truncate(50) %></p>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item text-danger text-right d-flex">
+              <% if item.user %>
+                <span class="p-2">판매자: <%= item.user.name %></span>
+                <span class="ml-auto p-2"><%= number_with_delimiter item.price%>원</span>
+              <% else %>
+                더 이상 판매되지 않는 상품입니다.
+              <% end %>
+            </li>
+          </ul>
+          <% if item.user && item.user == current_user %>
+            <div class="card-footer text-center">
+              <%= link_to "상세보기", item_path(item.id), class: "btn btn-outline-danger btn-sm" if item.user %>
+              <%= link_to "삭제", item_path(item), method: :delete, data: {confirm: "정말로 삭제하시겠습니까?" },class: "btn btn-outline-danger btn-sm" %>
+              <%= link_to "수정", edit_item_path(item), class: "btn btn-outline-danger btn-sm" %>
+            </div>
+          <% else %>
+            <div class="card-footer text-center">
+              <%= link_to "상세보기", item_path(item.id), class: "btn btn-outline-danger btn-sm" if item.user %>
+              <%= link_to "삭제", item_path(item), method: :delete, data: {confirm: "정말로 삭제하시겠습니까?" },class: "btn btn-outline-danger btn-sm" %>
+              <%= link_to "수정", edit_item_path(item), class: "btn btn-outline-danger btn-sm" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="row justify-content-center">
+    <%= paginate @items %>
+  </div>
+</div>

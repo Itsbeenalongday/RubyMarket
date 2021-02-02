@@ -1,0 +1,36 @@
+ko:
+  attributes:
+    title: 상품명
+    description: 상세설명
+    body: 내용
+    image: 이미지
+    user_id: 사용자
+    user: 사용자
+    item: 상품
+    item_id: 상품
+    price: 가격
+    category_id: 카테고리
+    order_id: 주문
+    quantity: 수량
+    status: 상태
+    cancled_at: 취소일
+    paid_at: 결제완료일
+    total: 총합
+    number: 주문번호
+    zipcode: 우편번호
+    address1: 주소
+    address2: 상세주소
+    created_at: 생성일
+    updated_at: 수정일
+    name: 이름
+    email: 이메일
+    phone: 휴대전화 번호
+
+  activerecord:
+    models:
+      category: 카테고리
+      comment: 댓글
+      item: 상품
+      user: 사용자
+      line_item: 주문항목
+      order: 주문

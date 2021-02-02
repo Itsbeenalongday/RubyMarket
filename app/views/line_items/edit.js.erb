@@ -1,0 +1,2 @@
+var html = "<%= j(render(partial: 'line_items/edit')) %>"
+$("#editable-<%= @line_item.id %>-quantity").replaceWith(html)
